@@ -11,8 +11,6 @@ from scipy.special import factorial
 from scipy.stats import poisson, norm
 import json
 from scipy.stats import lognorm
-import os
-from sqlalchemy import create_engine
 import datetime
 
 import streamlit.components.v1 as components  # Import Streamlit
@@ -21,7 +19,6 @@ import streamlit.components.v1 as components  # Import Streamlit
 with open('params.json') as json_file:
     params = json.load(json_file)
 
-engine = create_engine(os.getenv("DATABASE_URL"))
 icon = Image.open("resources/coin.png")
 st.set_page_config(page_title="Fairly", layout="wide", page_icon=icon, initial_sidebar_state="expanded")
 set_max_width()
@@ -91,11 +88,7 @@ col1.markdown("- The average worker with your profile is paid <font style='color
 "\n - You are paid more than <font style='color:darkorange'>{}%</font>".format(treshold) + " of the population with your profile.", 
 unsafe_allow_html=True)
 
-
 col2.write("- Consider uploading your data to continue improving the model. Please use your real salary to avoid polluting the dataset :)")
-if col3.button("Upload"):
-    df.to_sql('params', engine, if_exists='append', index=False)
-    st.warning("Thanks for sharing your anonymous data! Consider leaving your feedback [here](https://forms.gle/M8oBHAASBbvEaTq57)")
 
 # Plotting
 source = pd.DataFrame({'salary': x, 'pdf': pdf, 'user_salary':salary, 'conditional_mean':conditional_mean})
